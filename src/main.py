@@ -3,9 +3,20 @@ Power Plan AI - メインアプリケーション
 Windows電源プランをAIで自動最適化
 """
 import sys
+import os
 import logging
 from datetime import datetime
 from pathlib import Path
+
+# PyInstaller対応: 実行ファイルのディレクトリをパスに追加
+if getattr(sys, 'frozen', False):
+    # PyInstallerでビルドされた場合
+    BASE_DIR = Path(sys._MEIPASS)
+else:
+    # 開発環境
+    BASE_DIR = Path(__file__).parent
+
+sys.path.insert(0, str(BASE_DIR))
 
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import QTimer
@@ -217,7 +228,9 @@ class PowerPlanAI:
 
     def _plan_name_to_guid(self, name: str) -> str | None:
         """プラン名からGUIDを取得"""
-        if "高パフォーマンス" in name or "High" in name:
+        if "究極" in name or "Ultimate" in name:
+            return PowerManager.PLAN_ULTIMATE
+        elif "高パフォーマンス" in name or "High" in name:
             return PowerManager.PLAN_HIGH_PERFORMANCE
         elif "省電力" in name or "Saver" in name:
             return PowerManager.PLAN_POWER_SAVER

@@ -102,6 +102,7 @@ class DashboardWindow(QMainWindow):
 
     plan_changed = pyqtSignal(str)  # プランGUID
 
+    PLAN_ULTIMATE = "e9a42b02-d5df-448d-aa00-03f14749eb61"
     PLAN_HIGH = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
     PLAN_BALANCED = "381b4222-f694-41f0-9685-ff5bb260df2e"
     PLAN_SAVER = "a1841308-3541-4fab-bc81-f71556f20b4a"
@@ -166,19 +167,23 @@ class DashboardWindow(QMainWindow):
 
         # 電源プラン選択
         plan_group = QGroupBox("電源プラン")
-        plan_layout = QHBoxLayout(plan_group)
+        plan_layout = QGridLayout(plan_group)
 
-        self.btn_high = PlanButton("🚀 高パフォーマンス", "#e74c3c")
+        self.btn_ultimate = PlanButton("👑 究極", "#ffc832")
+        self.btn_ultimate.clicked.connect(lambda: self.plan_changed.emit(self.PLAN_ULTIMATE))
+        plan_layout.addWidget(self.btn_ultimate, 0, 0)
+
+        self.btn_high = PlanButton("🚀 高パフォ", "#e74c3c")
         self.btn_high.clicked.connect(lambda: self.plan_changed.emit(self.PLAN_HIGH))
-        plan_layout.addWidget(self.btn_high)
+        plan_layout.addWidget(self.btn_high, 0, 1)
 
         self.btn_balanced = PlanButton("⚖️ バランス", "#3498db")
         self.btn_balanced.clicked.connect(lambda: self.plan_changed.emit(self.PLAN_BALANCED))
-        plan_layout.addWidget(self.btn_balanced)
+        plan_layout.addWidget(self.btn_balanced, 1, 0)
 
         self.btn_saver = PlanButton("🔋 省電力", "#27ae60")
         self.btn_saver.clicked.connect(lambda: self.plan_changed.emit(self.PLAN_SAVER))
-        plan_layout.addWidget(self.btn_saver)
+        plan_layout.addWidget(self.btn_saver, 1, 1)
 
         main_layout.addWidget(plan_group)
 
@@ -258,6 +263,7 @@ class DashboardWindow(QMainWindow):
         self.card_cpu.set_value(f"{cpu:.0f}%")
 
         # プランボタンの状態更新
+        self.btn_ultimate.set_active("究極" in plan_name or "Ultimate" in plan_name)
         self.btn_high.set_active("高パフォーマンス" in plan_name or "High" in plan_name)
         self.btn_balanced.set_active("バランス" in plan_name or "Balanced" in plan_name)
         self.btn_saver.set_active("省電力" in plan_name or "Saver" in plan_name)

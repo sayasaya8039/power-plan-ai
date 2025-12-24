@@ -23,11 +23,13 @@ class PowerManager:
     """Windows電源プラン管理クラス"""
     
     # 標準電源プランのGUID
+    PLAN_ULTIMATE = "e9a42b02-d5df-448d-aa00-03f14749eb61"  # 究極のパフォーマンス
     PLAN_HIGH_PERFORMANCE = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
     PLAN_BALANCED = "381b4222-f694-41f0-9685-ff5bb260df2e"
     PLAN_POWER_SAVER = "a1841308-3541-4fab-bc81-f71556f20b4a"
     
     PLAN_NAMES = {
+        PLAN_ULTIMATE: "究極のパフォーマンス",
         PLAN_HIGH_PERFORMANCE: "高パフォーマンス",
         PLAN_BALANCED: "バランス",
         PLAN_POWER_SAVER: "省電力",
@@ -114,6 +116,30 @@ class PowerManager:
         """バランスモードに切り替え"""
         return self.set_active_plan(self.PLAN_BALANCED)
     
+    def set_ultimate(self) -> bool:
+        """究極のパフォーマンスモードに切り替え"""
+        # プランが存在しない場合は作成を試みる
+        self._ensure_ultimate_plan_exists()
+        return self.set_active_plan(self.PLAN_ULTIMATE)
+
+    def _ensure_ultimate_plan_exists(self):
+        """究極のパフォーマンスプランが存在することを確認、なければ作成"""
+        plans = self.get_power_plans()
+        for plan in plans:
+            if "究極" in plan.name or "Ultimate" in plan.name:
+                return  # 既に存在
+        # プランを複製して作成
+        try:
+            subprocess.run(
+                ["powercfg", "-duplicatescheme", self.PLAN_ULTIMATE],
+                capture_output=True,
+                creationflags=subprocess.CREATE_NO_WINDOW
+            )
+            logger.info("究極のパフォーマンスプランを作成しました")
+        except Exception as e:
+            logger.warning(f"究極のパフォーマンスプラン作成失敗: {e}")
+
+
     def set_power_saver(self) -> bool:
         """省電力モードに切り替え"""
         return self.set_active_plan(self.PLAN_POWER_SAVER)

@@ -21,6 +21,7 @@ class TrayIcon(QObject):
     quit_app = pyqtSignal()
 
     # プランGUID
+    PLAN_ULTIMATE = "e9a42b02-d5df-448d-aa00-03f14749eb61"
     PLAN_HIGH = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
     PLAN_BALANCED = "381b4222-f694-41f0-9685-ff5bb260df2e"
     PLAN_SAVER = "a1841308-3541-4fab-bc81-f71556f20b4a"
@@ -59,6 +60,13 @@ class TrayIcon(QObject):
         self.menu.addSeparator()
 
         # 電源プラン選択
+        self.action_ultimate = QAction("究極のパフォーマンス", self.menu)
+        self.action_ultimate.setCheckable(True)
+        self.action_ultimate.triggered.connect(
+            lambda: self.plan_changed.emit(self.PLAN_ULTIMATE)
+        )
+        self.menu.addAction(self.action_ultimate)
+
         self.action_high = QAction("高パフォーマンス", self.menu)
         self.action_high.setCheckable(True)
         self.action_high.triggered.connect(
@@ -107,7 +115,10 @@ class TrayIcon(QObject):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         # プランに応じた色
-        if "高パフォーマンス" in plan or "High" in plan:
+        if "究極" in plan or "Ultimate" in plan:
+            color = QColor(255, 200, 50)  # 金色
+            text = "U"
+        elif "高パフォーマンス" in plan or "High" in plan:
             color = QColor(255, 100, 100)  # 赤
             text = "H"
         elif "省電力" in plan or "Saver" in plan:
@@ -151,6 +162,7 @@ class TrayIcon(QObject):
         self._battery_percent = battery
 
         # メニューのチェック状態更新
+        self.action_ultimate.setChecked("究極" in plan_name or "Ultimate" in plan_name)
         self.action_high.setChecked("高パフォーマンス" in plan_name or "High" in plan_name)
         self.action_balanced.setChecked("バランス" in plan_name or "Balanced" in plan_name)
         self.action_saver.setChecked("省電力" in plan_name or "Saver" in plan_name)
