@@ -1,8 +1,8 @@
 # ⚡ Power Plan AI - Windows電源プラン最適化アプリ
 
-[![Release](https://img.shields.io/github/v/release/your-username/power-plan-ai?style=flat-square)](https://github.com/your-username/power-plan-ai/releases)
+[![Release](https://img.shields.io/github/v/release/sayasaya8039/power-plan-ai?style=flat-square)](https://github.com/sayasaya8039/power-plan-ai/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
-[![Windows](https://img.shields.io/badge/platform-Windows-0078D6?style=flat-square&logo=windows)](https://github.com/your-username/power-plan-ai/releases)
+[![Windows](https://img.shields.io/badge/platform-Windows-0078D6?style=flat-square&logo=windows)](https://github.com/sayasaya8039/power-plan-ai/releases)
 
 **AIがあなたの使用パターンを学習し、Windows電源プランを自動で最適化します**
 
@@ -10,7 +10,7 @@
 
 ## 概要
 
-Power Plan AI は、ユーザーの使用パターン（アプリ使用、時間帯、バッテリー状態、CPU負荷）を学習し、最適な電源プラン（高パフォーマンス/バランス/省電力）を自動で切り替えるWindowsデスクトップアプリです。
+Power Plan AI は、ユーザーの使用パターン（アプリ使用、時間帯、バッテリー状態、CPU負荷）を学習し、最適な電源プラン（究極のパフォーマンス/高パフォーマンス/バランス/省電力）を自動で切り替えるWindowsデスクトップアプリです。
 
 **既存ツールとの違い:**
 - 従来の電源管理ツール → 手動切り替えのみ
@@ -19,6 +19,7 @@ Power Plan AI は、ユーザーの使用パターン（アプリ使用、時間
 ## 主な機能
 
 - **AI自動最適化**: 使用パターンを学習し、最適な電源プランを自動選択
+- **4つの電源プラン**: 究極のパフォーマンス/高パフォーマンス/バランス/省電力
 - **トレイ常駐**: システムトレイに常駐し、いつでもクイックアクセス
 - **ダッシュボード**: 現在の状態、AI推奨、統計情報を一覧表示
 - **手動切替**: 必要に応じて手動でプランを変更可能
@@ -27,19 +28,20 @@ Power Plan AI は、ユーザーの使用パターン（アプリ使用、時間
 ## スクリーンショット
 
 ```
-┌─────────────────────────────────────────┐
-│  ⚡ Power Plan AI                        │
-│  AIが最適な電源プランを自動選択します   │
-├─────────────────────────────────────────┤
-│  現在のプラン │ バッテリー │ CPU使用率  │
-│    バランス   │    96%     │    22%     │
-├─────────────────────────────────────────┤
-│  🚀 高パフォーマンス  ⚖️ バランス  🔋 省電力  │
-├─────────────────────────────────────────┤
-│  AI推奨: バランス                       │
-│  理由: 標準設定（学習データ収集中）     │
-│  信頼度: ████████░░ 80%                 │
-└─────────────────────────────────────────┘
+┌───────────────────────────────────────────┐
+│  ⚡ Power Plan AI                          │
+│  AIが最適な電源プランを自動選択します     │
+├───────────────────────────────────────────┤
+│  現在のプラン │ バッテリー │ CPU使用率    │
+│    バランス   │    96%     │    22%       │
+├───────────────────────────────────────────┤
+│  👑 究極        │  🚀 高パフォーマンス    │
+│  ⚖️ バランス    │  🔋 省電力              │
+├───────────────────────────────────────────┤
+│  AI推奨: バランス                         │
+│  理由: 標準設定（学習データ収集中）       │
+│  信頼度: ████████░░ 80%                   │
+└───────────────────────────────────────────┘
 ```
 
 ## インストール
@@ -112,6 +114,7 @@ Windows_power_plan_AI_optimization/
 - Windows専用アプリです
 - 初回起動時はAI学習データがないため、デフォルト設定で動作します
 - バッテリー残量20%未満では自動的に省電力モードになります
+- 「究極のパフォーマンス」プランが存在しない場合は自動的に作成されます
 
 ## ライセンス
 
