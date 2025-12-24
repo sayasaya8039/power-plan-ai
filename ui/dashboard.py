@@ -5,7 +5,7 @@
 from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QPushButton, QFrame, QProgressBar,
-    QGroupBox, QGridLayout, QScrollArea
+    QGroupBox, QGridLayout, QScrollArea, QCheckBox
 )
 from PyQt6.QtGui import QFont, QColor, QPalette
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer
@@ -101,6 +101,7 @@ class DashboardWindow(QMainWindow):
     """ダッシュボードウィンドウ"""
 
     plan_changed = pyqtSignal(str)  # プランGUID
+    startup_changed = pyqtSignal(bool)  # スタートアップ設定変更
 
     PLAN_ULTIMATE = "e9a42b02-d5df-448d-aa00-03f14749eb61"
     PLAN_HIGH = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
@@ -232,6 +233,39 @@ class DashboardWindow(QMainWindow):
 
         main_layout.addWidget(stats_group)
 
+        # 設定
+        settings_group = QGroupBox("設定")
+        settings_layout = QVBoxLayout(settings_group)
+
+        self.startup_checkbox = QCheckBox("Windows起動時に自動で開始する")
+        self.startup_checkbox.setStyleSheet("""
+            QCheckBox {
+                color: white;
+                font-size: 13px;
+                padding: 5px;
+            }
+            QCheckBox::indicator {
+                width: 18px;
+                height: 18px;
+            }
+            QCheckBox::indicator:unchecked {
+                border: 2px solid #555;
+                border-radius: 3px;
+                background-color: #2d2d2d;
+            }
+            QCheckBox::indicator:checked {
+                border: 2px solid #4fc3f7;
+                border-radius: 3px;
+                background-color: #4fc3f7;
+            }
+        """)
+        self.startup_checkbox.stateChanged.connect(
+            lambda state: self.startup_changed.emit(state == 2)
+        )
+        settings_layout.addWidget(self.startup_checkbox)
+
+        main_layout.addWidget(settings_group)
+
         # スペーサー
         main_layout.addStretch()
 
@@ -279,6 +313,12 @@ class DashboardWindow(QMainWindow):
         self.stat_high.setText(f"高パフォーマンス: {stats.get('high_perf_minutes', 0)}分")
         self.stat_balanced.setText(f"バランス: {stats.get('balanced_minutes', 0)}分")
         self.stat_saver.setText(f"省電力: {stats.get('power_saver_minutes', 0)}分")
+
+    def set_startup_checked(self, checked: bool):
+        """スタートアップチェックボックスの状態を設定"""
+        self.startup_checkbox.blockSignals(True)
+        self.startup_checkbox.setChecked(checked)
+        self.startup_checkbox.blockSignals(False)
 
     def closeEvent(self, event):
         """閉じるボタンでは非表示にする"""

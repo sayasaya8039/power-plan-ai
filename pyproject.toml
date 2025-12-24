@@ -1,6 +1,6 @@
 [project]
 name = "power-plan-ai"
-version = "1.0.0"
+version = "1.1.0"
 description = "Windows電源プランAI最適化アプリ"
 requires-python = ">=3.11"
 dependencies = [

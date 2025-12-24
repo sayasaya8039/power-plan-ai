@@ -31,8 +31,9 @@ from database import Database, UsageRecord
 from pattern_learner import SmartOptimizer
 from ui.tray_icon import TrayIcon
 from ui.dashboard import DashboardWindow
+from startup_manager import StartupManager
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 # ログ設定
 logging.basicConfig(
@@ -63,9 +64,15 @@ class PowerPlanAI:
         self.database = Database()
         self.optimizer = SmartOptimizer()
 
+        # スタートアップマネージャー
+        self.startup_manager = StartupManager()
+
         # UI
         self.tray = TrayIcon(self.app)
         self.dashboard = DashboardWindow()
+        
+        # スタートアップ状態を反映
+        self.dashboard.set_startup_checked(self.startup_manager.is_registered())
 
         # シグナル接続
         self._connect_signals()
@@ -94,6 +101,7 @@ class PowerPlanAI:
 
         # ダッシュボード
         self.dashboard.plan_changed.connect(self._on_plan_change_request)
+        self.dashboard.startup_changed.connect(self._on_startup_change)
 
     def _show_dashboard(self):
         """ダッシュボードを表示"""
@@ -132,6 +140,24 @@ class PowerPlanAI:
                 )
 
             self._update_ui()
+
+    def _on_startup_change(self, enabled: bool):
+        """スタートアップ設定変更"""
+        success = self.startup_manager.set_startup(enabled)
+        if success:
+            status = "登録" if enabled else "解除"
+            self.tray.show_notification(
+                "スタートアップ設定",
+                f"Windows起動時の自動起動を{status}しました"
+            )
+            logger.info(f"スタートアップ{status}")
+        else:
+            # 失敗した場合は元に戻す
+            self.dashboard.set_startup_checked(not enabled)
+            self.tray.show_notification(
+                "エラー",
+                "スタートアップ設定の変更に失敗しました"
+            )
 
     def _on_monitor_tick(self):
         """監視タイマーのティック"""
